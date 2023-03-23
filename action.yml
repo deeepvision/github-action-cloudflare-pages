@@ -1,0 +1,15 @@
+name: 'Deploy to Cloudflare Pages'
+description: 'Upload static files to Cloudflare Pages'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+inputs:
+  directory:
+    description: 'The directory to upload'
+    required: false
+  build:
+    description: 'The build command to run'
+    required: false
+  project:
+    description: 'The project name on Cloudflare'
+    required: true
