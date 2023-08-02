@@ -1,4 +1,4 @@
-name: Publish Docker Image
+name: Deploy Service
 
 on:
   push:
@@ -6,12 +6,31 @@ on:
       - v*
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
-      - uses: actions/checkout@master
+      - id: checkout
         name: Checkout
-      - uses: docker://ghcr.io/deeepvision/github-action-docker-build:1.2
-        name: Build Docker Image to Github Registry
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/checkout@master
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ vars.GCP_AUTH_WORKLOAD_IDENTITY_POOL }}
+          service_account: ${{ vars.GCP_AUTH_SERVICE_ACCOUNT }}
+
+      - id: build
+        name: Build Docker Image
+        uses: docker://us-docker.pkg.dev/deepops/pub/github-action-docker-build:1.4
+        with:
+          region: us
+          project: deepops
+          repo: pub
+          name: github-action-cloudflare-pages
+          accessToken: ${{ steps.auth.outputs.access_token }}
