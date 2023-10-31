@@ -11,7 +11,7 @@ function main() {
 
   npm install
   npm run ${BUILD_COMMAND}
-  wrangler pages publish --project-name=${INPUT_PROJECT} --branch master ${BUILD_DIRECTORY}
+  wrangler pages deploy --project-name=${INPUT_PROJECT} --branch master ${BUILD_DIRECTORY}
 }
 
 main
