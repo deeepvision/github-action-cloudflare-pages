@@ -1,4 +1,4 @@
-name: Deploy Service
+name: Build Image
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - id: checkout
         name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
 
       - id: auth
         name: Authenticate to Google Cloud
